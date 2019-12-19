@@ -45,6 +45,15 @@
       console.log(tags);
       let data = message.split(' ');
       let now = Date.now() / 1000.;
+
+      // First thing first, stop if requested
+      if((tags['mod'] === true) || (tags['username'] === config['channel'])) {
+        if (data[0] === '!stop') {
+          player.pause();
+          isPlaying = false;
+        }
+      }
+
       // <prefix> <command>
       if (data[0] !== config['prefix'])
         // Fail-fast si le prefix est faux
@@ -86,7 +95,7 @@
       for(let idx in tracks) {
         // Si la command est trouvée
         if(command === tracks[idx]['command']) {
-          console.log(`lecture de ${tracks[idx]['file']} par ${tags['username']}`);
+          console.log(`Lecture de ${tracks[idx]['file']} par ${tags['username']}`);
 
           // Vérifions si l'utilisateur ne dépasse pas le cooldown
           let user = tags['username'];
