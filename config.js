@@ -1,16 +1,11 @@
 const config = {
-  'channel': 'eskimon',
-  'identity': {
-    // username: 'bot-name',
-    // password: 'oauth:my-bot-token'
-  },
+  'channel': 'eskimon', // Change here the name of your channel
   'cooldown': {
     'user': 10,  // Minimal time (seconds) before a user can play again a track
     'track': 10,  // Minimal time (seconds) before the same track can be played again
     'command': 1,  // Minimal time (seconds) before the command can be used again
   },
-  'prefix': '!play',
-
+  'prefix': '!play',  // Prefix to which your bot respond (ie. !play mysupermusic)
   'rights': {
     'user': true,  // Allow users to use the bot
     'mods': true,  // Allow moderators to use the bot
@@ -35,5 +30,9 @@ const tracks = [
   {
     'command': 'bucher',
     'file': '/home/eskimon/Documents/Bot_twitch_audio/bucher1.mp3'
+  },
+  {
+    'command': 'grelotine',
+    'file': '/home/eskimon/Documents/Bot_twitch_audio/Grelotine.mp3'
   }
 ]
