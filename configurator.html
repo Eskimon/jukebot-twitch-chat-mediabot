@@ -100,16 +100,24 @@
     config_form['cooldown_track'].value = config['cooldown']['track'];
     config_form['cooldown_command'].value = config['cooldown']['command'];
 
-    function delete_line(id) {
-      console.log('delete_line', id);
+    for(let idx in tracks) {
+      addfile(tracks[idx]['command'], tracks[idx]['file']);
     }
 
-    function addfile() {
-      let now = Date.now();
+    function delete_line(id) {
+      console.log(id);
+      let elmt = document.getElementById(id);
+      console.log(elmt);
+      elmt.remove();
+    }
+
+    function addfile(command='', path='') {
+      let now = Math.random();
       let new_file_line = document.createElement('tr');
+      new_file_line.id = `line_${now}`;
       new_file_line.innerHTML = `
-      <td id="line_${now}" class="track_line"><input name="commandname" placeholder="command name"></td>
-      <td><input name="commandpath" placeholder="c:/absolute/file/path.mp3"></td>
+      <td class="track_line"><input name="commandname" placeholder="command name" value="${command}"></td>
+      <td><input name="commandpath" placeholder="c:/absolute/file/path.mp3" value="${path}"></td>
       <td onclick="delete_line('line_${now}');">🚮</td>`;
       filelist.append(new_file_line);
     }
