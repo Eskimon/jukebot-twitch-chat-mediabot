@@ -36,12 +36,32 @@
     chat.connect();
 
     chat.on('message', (channel, tags, message, self) => {
+      console.log(tags);
       let data = message.split(' ');
       let now = Date.now() / 1000.;
       // <prefix> <command>
       if (data[0] !== config['prefix'])
         // Fail-fast si le prefix est faux
         return;
+
+      if(config['rights']['user'] === false) {
+        if(tags['username'] === config['channel']) {
+          console.log(`${config['channel']} est le boss, lets go`);
+        }
+        else if((config['rights']['mods'] === true) && (tags['mod'] === true)) {
+          console.log(`${tags['username']} est un modo, lets go`);
+        }
+        else if((config['rights']['subs'] === true) &&
+          ('premium' in tags['badges'] || 'subscriber' in tags['badges'])) {
+          console.log(`${tags['username']} est un sub, lets go`);
+        }
+        else if((config['rights']['vips'] === true) && ('vip' in tags['badges'])) {
+          console.log(`${tags['username']} est un vip, lets go`);
+        } else {
+          return;
+        }
+      }
+
 
       if( cooldown['command'] > (now - config['cooldown']['command'])) {
         console.error(`The use of the command is violating the ${config['cooldown']['command']}s cooldown`);

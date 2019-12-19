@@ -10,6 +10,13 @@ const config = {
     'command': 1,  // Minimal time (seconds) before the command can be used again
   },
   'prefix': '!play',
+
+  'rights': {
+    'user': false,  // Allow users to use the bot
+    'mods': true,  // Allow moderators to use the bot
+    'subs': true,  // Allow subs to use the bot
+    'vips': true,  // Allow vips to use the bot
+  }
 }
 
 const tracks = [
