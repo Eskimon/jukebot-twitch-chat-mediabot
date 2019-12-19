@@ -67,13 +67,27 @@
           </div>
         </div>
       </form>
+
       <button onclick="exportConfig();">Save config.js</button>
       <a id="fake_link" href="#" download="config.js" download style="visibility: hidden;"></a>
+
+      <table class="table is-hoverable is-striped">
+        <thead>
+          <tr><th>Command name</th><th>Audio file path</th><th></th></tr>
+        </thead>
+        <tbody id="filelist">
+          <tr><td colspan="3" class="has-text-centered"><button onclick="addfile();">Add a new file</button></td></tr>
+          <tr><td class="track_line" id="line_1"><input name="commandname" placeholder="command name"></td><td><input name="commandpath" placeholder="c:/absolute/file/path.mp3"></td><td onclick="delete_line('line_1');">🚮</td></td></tr>
+        </tbody>
+      </table>
     </div>
   </body>
 
   <script>
     let config_form = document.getElementById('config_form');
+    let tracks_form = document.getElementById('tracks_form');
+    let filelist = document.getElementById('filelist');
+    let uploaded_tracks = [];
 
     // Load all default data
     config_form['channel'].value = config['channel'];
@@ -86,6 +100,19 @@
     config_form['cooldown_track'].value = config['cooldown']['track'];
     config_form['cooldown_command'].value = config['cooldown']['command'];
 
+    function delete_line(id) {
+      console.log('delete_line', id);
+    }
+
+    function addfile() {
+      let now = Date.now();
+      let new_file_line = document.createElement('tr');
+      new_file_line.innerHTML = `
+      <td id="line_${now}" class="track_line"><input name="commandname" placeholder="command name"></td>
+      <td><input name="commandpath" placeholder="c:/absolute/file/path.mp3"></td>
+      <td onclick="delete_line('line_${now}');">🚮</td>`;
+      filelist.append(new_file_line);
+    }
 
     function exportConfig() {
       config['channel'] = config_form['channel'].value;
@@ -98,7 +125,31 @@
       config['cooldown']['track'] = parseInt(config_form['cooldown_track'].value);
       config['cooldown']['command'] = parseInt(config_form['cooldown_command'].value);
 
-      let result = 'const config = ' + JSON.stringify(config);
+      let track_lines = document.getElementsByTagName('tr');
+      for(let i in track_lines) {
+        try {
+          let inputs = track_lines[i].getElementsByTagName('input');
+          let name = undefined;
+          let path = undefined;
+          for(let j in inputs) {
+            if(inputs[j].name === 'commandname')
+              name = inputs[j].value;
+            if(inputs[j].name === 'commandpath')
+              path = inputs[j].value;
+          }
+          if(name && path) {
+            uploaded_tracks.push({
+              'command': name,
+              'file': path,
+            })
+          }
+        }
+        catch(err) {
+        }
+      }
+
+      let result = 'const config = ' + JSON.stringify(config, null, 2) + ';\n\n';
+      result += 'const tracks = ' + JSON.stringify(uploaded_tracks, null, 2);
       let b64 = 'data:application/javascript;base64,' + window.btoa(unescape(encodeURIComponent(result)));
       let fake_link = document.getElementById('fake_link');
       fake_link.href = b64;
