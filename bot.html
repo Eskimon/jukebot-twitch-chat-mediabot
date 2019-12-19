@@ -11,8 +11,7 @@
   </body>
   <script>
     const player = document.getElementById('player');
-
-    const client = new window.tmi.Client({
+    const chat = new window.tmi.Client({
       options: { debug: true },
       connection: {
         reconnect: true,
@@ -22,12 +21,12 @@
       //   username: 'bot-name',
       //   password: 'oauth:my-bot-token'
       // },
-      channels: [ 'eskimon' ]
+      channels: [ config['channel'] ]
     });
 
-    client.connect();
+    chat.connect();
 
-    client.on('message', (channel, tags, message, self) => {
+    chat.on('message', (channel, tags, message, self) => {
       let data = message.split(' ');
       // !play <command>
       if (data[0] === '!play') {
