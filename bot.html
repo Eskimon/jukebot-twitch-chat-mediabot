@@ -48,23 +48,34 @@
         return;
       }
 
-
       let command = data[1];
       // on parcours le tableau 'tracks'
       for(let idx in tracks) {
         // Si la command est trouvée
         if(command === tracks[idx]['command']) {
           console.log(`lecture de ${tracks[idx]['file']} par ${tags['username']}`);
+
+          // Vérifions si l'utilisateur ne dépasse pas le cooldown
           let user = tags['username'];
           if (user in cooldown['chatters']) {
-            // Vérifions si l'utilisateur ne dépasse pas le cooldown
-            let ts = chatters[user];
+            let ts = cooldown['chatters'][user];
             if( ts > (now - config['cooldown']['user'])) {
               console.error(`${user} is violating the ${config['cooldown']['user']}s cooldown`);
               return;
             }
           }
+
+          // Vérifions si la track ne dépasse pas le cooldown
+          if (command in cooldown['tracks']) {
+            let ts = cooldown['tracks'][command];
+            if( ts > (now - config['cooldown']['track'])) {
+              console.error(`Track ${command} is violating the ${config['cooldown']['track']}s cooldown`);
+              return;
+            }
+          }
+
           cooldown['chatters'][user] = now;  // Met à jour le ts du user
+          cooldown['tracks'][command] = now;
           cooldown['command'] = now;
 
           player.src = `file:///${tracks[idx]['file']}`;
