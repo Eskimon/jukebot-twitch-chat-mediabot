@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My bot</title>
+    <script src="./config.js"></script>
+    <script src="./tmi.min.js"></script>
+  </head>
+  <body>
+    <audio id="player" />
+  </body>
+  <script>
+    const player = document.getElementById('player');
+
+    const client = new window.tmi.Client({
+      options: { debug: true },
+      connection: {
+        reconnect: true,
+        secure: true
+      },
+      // identity: {
+      //   username: 'bot-name',
+      //   password: 'oauth:my-bot-token'
+      // },
+      channels: [ 'eskimon' ]
+    });
+
+    client.connect();
+
+    client.on('message', (channel, tags, message, self) => {
+      let data = message.split(' ');
+      // !play <command>
+      if (data[0] === '!play') {
+        let command = data[1];
+        // on parcours le tableau 'tracks'
+        for(let idx in tracks) {
+          // Si la command est trouvée
+          if(command === tracks[idx]['command']) {
+            console.log('lecture de ', tracks[idx]);
+            player.src = `file:///${tracks[idx]['file']}`;
+            player.play();
+          }
+        }
+      }
+    });
+  </script>
+
+</html>
