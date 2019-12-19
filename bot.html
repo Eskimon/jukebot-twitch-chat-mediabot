@@ -10,10 +10,14 @@
     <audio id="player" />
   </body>
   <script>
-    let chatters = {
-      /*
-      '<pseudo>': <date last command execution>
-      */
+    let cooldown = {
+      'chatters': {
+        // '<pseudo>': <date last command execution>
+      },
+      'tracks': {
+        // '<command>': <date last command execution>
+      },
+      'command': 0,
     }
     const player = document.getElementById('player');
     const chat = new window.tmi.Client({
@@ -33,10 +37,17 @@
 
     chat.on('message', (channel, tags, message, self) => {
       let data = message.split(' ');
+      let now = Date.now() / 1000.;
       // <prefix> <command>
       if (data[0] !== config['prefix'])
         // Fail-fast si le prefix est faux
         return;
+
+      if( cooldown['command'] > (now - config['cooldown']['command'])) {
+        console.error(`The use of the command is violating the ${config['cooldown']['command']}s cooldown`);
+        return;
+      }
+
 
       let command = data[1];
       // on parcours le tableau 'tracks'
@@ -45,8 +56,7 @@
         if(command === tracks[idx]['command']) {
           console.log(`lecture de ${tracks[idx]['file']} par ${tags['username']}`);
           let user = tags['username'];
-          let now = Date.now() / 1000.;
-          if (user in chatters) {
+          if (user in cooldown['chatters']) {
             // Vérifions si l'utilisateur ne dépasse pas le cooldown
             let ts = chatters[user];
             if( ts > (now - config['cooldown']['user'])) {
@@ -54,8 +64,9 @@
               return;
             }
           }
-          chatters[user] = now;  // Met à jour le ts du user
-          console.log(chatters);
+          cooldown['chatters'][user] = now;  // Met à jour le ts du user
+          cooldown['command'] = now;
+
           player.src = `file:///${tracks[idx]['file']}`;
           player.play();
         }
