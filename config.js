@@ -1,9 +1,15 @@
 const config = {
   'channel': 'eskimon',
   'identity': {
-  // username: 'bot-name',
-  // password: 'oauth:my-bot-token'
+    // username: 'bot-name',
+    // password: 'oauth:my-bot-token'
   },
+  'cooldown': {
+    'user': 10,  // Minimal time (seconds) before a user can play again a track
+    'track': 10,  // Minimal time (seconds) before the same track can be played again
+    'command': 10,  // Minimal time (seconds) before the command can be used again
+  },
+  'prefix': '!play',
 }
 
 const tracks = [

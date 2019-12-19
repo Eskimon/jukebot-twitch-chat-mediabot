@@ -10,6 +10,11 @@
     <audio id="player" />
   </body>
   <script>
+    let chatters = {
+      /*
+      '<pseudo>': <date last command execution>
+      */
+    }
     const player = document.getElementById('player');
     const chat = new window.tmi.Client({
       options: { debug: true },
@@ -28,17 +33,31 @@
 
     chat.on('message', (channel, tags, message, self) => {
       let data = message.split(' ');
-      // !play <command>
-      if (data[0] === '!play') {
-        let command = data[1];
-        // on parcours le tableau 'tracks'
-        for(let idx in tracks) {
-          // Si la command est trouvée
-          if(command === tracks[idx]['command']) {
-            console.log('lecture de ', tracks[idx]);
-            player.src = `file:///${tracks[idx]['file']}`;
-            player.play();
+      // <prefix> <command>
+      if (data[0] !== config['prefix'])
+        // Fail-fast si le prefix est faux
+        return;
+
+      let command = data[1];
+      // on parcours le tableau 'tracks'
+      for(let idx in tracks) {
+        // Si la command est trouvée
+        if(command === tracks[idx]['command']) {
+          console.log(`lecture de ${tracks[idx]['file']} par ${tags['username']}`);
+          let user = tags['username'];
+          let now = Date.now() / 1000.;
+          if (user in chatters) {
+            // Vérifions si l'utilisateur ne dépasse pas le cooldown
+            let ts = chatters[user];
+            if( ts > (now - config['cooldown']['user'])) {
+              console.error(`${user} is violating the ${config['cooldown']['user']}s cooldown`);
+              return;
+            }
           }
+          chatters[user] = now;  // Met à jour le ts du user
+          console.log(chatters);
+          player.src = `file:///${tracks[idx]['file']}`;
+          player.play();
         }
       }
     });
