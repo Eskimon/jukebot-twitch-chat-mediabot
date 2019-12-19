@@ -12,7 +12,7 @@ const config = {
   'prefix': '!play',
 
   'rights': {
-    'user': false,  // Allow users to use the bot
+    'user': true,  // Allow users to use the bot
     'mods': true,  // Allow moderators to use the bot
     'subs': true,  // Allow subs to use the bot
     'vips': true,  // Allow vips to use the bot
@@ -27,5 +27,13 @@ const tracks = [
   {
     'command': 'amoi',
     'file': '/home/eskimon/Documents/Bot_twitch_audio/a_moi.mp3'
+  },
+  {
+    'command': 'assassin',
+    'file': '/home/eskimon/Documents/Bot_twitch_audio/a_moi_a_lassassin.mp3'
+  },
+  {
+    'command': 'bucher',
+    'file': '/home/eskimon/Documents/Bot_twitch_audio/bucher1.mp3'
   }
 ]

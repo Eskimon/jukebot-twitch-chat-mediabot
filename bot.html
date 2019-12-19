@@ -19,7 +19,13 @@
       },
       'command': 0,
     }
+
+    let isPlaying = false;
     const player = document.getElementById('player');
+    player.addEventListener('ended', () => {
+      isPlaying = false;
+    });
+
     const chat = new window.tmi.Client({
       options: { debug: true },
       connection: {
@@ -44,6 +50,7 @@
         // Fail-fast si le prefix est faux
         return;
 
+      // Vérifie les droits des utilisateurs
       if(config['rights']['user'] === false) {
         if(tags['username'] === config['channel']) {
           console.log(`${config['channel']} est le boss, lets go`);
@@ -62,9 +69,15 @@
         }
       }
 
-
+      // Vérifie le cooldown du bot
       if( cooldown['command'] > (now - config['cooldown']['command'])) {
         console.error(`The use of the command is violating the ${config['cooldown']['command']}s cooldown`);
+        return;
+      }
+
+      // Vérifie qu'un fichier n'est pas déjà en lecture
+      if(isPlaying) {
+        console.error('Un morceau est déjà en lecture');
         return;
       }
 
@@ -100,6 +113,7 @@
 
           player.src = `file:///${tracks[idx]['file']}`;
           player.play();
+          isPlaying = true;
         }
       }
     });
