@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My bot configurator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script src="./config.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <form id="config_form" onsubmit="return false">
+        <div class="field">
+          <label class="label" for="channel">Your channel name</label>
+          <div class="control">
+            <input id="channel" name="channel" class="input" type="text" placeholder="eskimon">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="prefix">Your bot command</label>
+          <div class="control">
+            <input id="prefix" name="prefix" class="input" type="text" placeholder="!play" value="!play">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="rights_user">
+            <input id="rights_user" name="rights_user" type="checkbox">
+            User
+          </label>
+        </div>
+        <div class="field">
+          <label class="label" for="rights_mods">
+            <input id="rights_mods" name="rights_mods" type="checkbox">
+            Moderators
+          </label>
+        </div>
+        <div class="field">
+          <label class="label" for="rights_subs">
+            <input id="rights_subs" name="rights_subs" type="checkbox">
+            Subs
+          </label>
+        </div>
+        <div class="field">
+          <label class="label" for="rights_vips">
+            <input id="rights_vips" name="rights_vips" type="checkbox">
+            VIPs
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="label" for="cooldown_user">Cooldown per user</label>
+          <div class="control">
+            <input id="cooldown_user" name="cooldown_user" class="input" type="number" min="0" value="10">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="cooldown_track">Cooldown per track</label>
+          <div class="control">
+            <input id="cooldown_track" name="cooldown_track" class="input" type="number" min="0" value="10">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="cooldown_command">Cooldown per call</label>
+          <div class="control">
+            <input id="cooldown_command" name="cooldown_command" class="input" type="number" min="0" value="5">
+          </div>
+        </div>
+      </form>
+      <button onclick="exportConfig();">Save config.js</button>
+      <a id="fake_link" href="#" download="config.js" download style="visibility: hidden;"></a>
+    </div>
+  </body>
+
+  <script>
+    let config_form = document.getElementById('config_form');
+
+    // Load all default data
+    config_form['channel'].value = config['channel'];
+    config_form['prefix'].value = config['prefix'];
+    config_form['rights_user'].checked = config['rights']['user'];
+    config_form['rights_mods'].checked = config['rights']['mods'];
+    config_form['rights_subs'].checked = config['rights']['subs'];
+    config_form['rights_vips'].checked = config['rights']['vips'];
+    config_form['cooldown_user'].value = config['cooldown']['user'];
+    config_form['cooldown_track'].value = config['cooldown']['track'];
+    config_form['cooldown_command'].value = config['cooldown']['command'];
+
+
+    function exportConfig() {
+      config['channel'] = config_form['channel'].value;
+      config['prefix'] = config_form['prefix'].value;
+      config['rights']['user'] = config_form['rights_user'].checked;
+      config['rights']['mods'] = config_form['rights_mods'].checked;
+      config['rights']['subs'] = config_form['rights_subs'].checked;
+      config['rights']['vips'] = config_form['rights_vips'].checked;
+      config['cooldown']['user'] = parseInt(config_form['cooldown_user'].value);
+      config['cooldown']['track'] = parseInt(config_form['cooldown_track'].value);
+      config['cooldown']['command'] = parseInt(config_form['cooldown_command'].value);
+
+      let result = 'const config = ' + JSON.stringify(config);
+      let b64 = 'data:application/javascript;base64,' + window.btoa(unescape(encodeURIComponent(result)));
+      let fake_link = document.getElementById('fake_link');
+      fake_link.href = b64;
+      fake_link.click();
+      return false;
+    }
+  </script>
+</html>
