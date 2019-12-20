@@ -121,8 +121,13 @@
           cooldown['command'] = now;
 
           player.src = `file:///${tracks[idx]['file']}`;
-          player.play();
-          isPlaying = true;
+          player.play()
+            .then(() => {
+              isPlaying = true;
+            })
+            .catch(() => {
+              isPlaying = false;
+            });
         }
       }
     });
