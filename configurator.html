@@ -160,13 +160,14 @@
     function addfile(command='', path='') {
       let now = Math.random();
       let new_file_line = document.createElement('tr');
+      let prefix = document.getElementById('prefix').value;
       new_file_line.id = `line_${now}`;
       new_file_line.className = 'track_line';
       new_file_line.innerHTML = `
       <td>
         <div class="field has-addons">
           <p class="control">
-            <span class="button is-static is-small bot-command-addon"></span>
+            <span class="button is-static is-small bot-command-addon">${prefix}</span>
           </p>
           <p class="control">
             <input class="input is-small" name="commandname" placeholder="command name" value="${command}">
