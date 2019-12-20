@@ -17,6 +17,10 @@
       .container {
         padding: 20px;
       }
+
+      .pointer {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -149,9 +153,7 @@
     update_command_name();
 
     function delete_line(id) {
-      console.log(id);
       let elmt = document.getElementById(id);
-      console.log(elmt);
       elmt.remove();
     }
 
@@ -159,8 +161,9 @@
       let now = Math.random();
       let new_file_line = document.createElement('tr');
       new_file_line.id = `line_${now}`;
+      new_file_line.className = 'track_line';
       new_file_line.innerHTML = `
-      <td class="track_line">
+      <td>
         <div class="field has-addons">
           <p class="control">
             <span class="button is-static is-small bot-command-addon"></span>
@@ -173,7 +176,7 @@
       <td>
         <input class="input is-small" name="commandpath" placeholder="c:/absolute/file/path.mp3" value="${path}">
       </td>
-      <td><a href="#" title="remove this line" onclick="delete_line('line_${now}')";>🚮</a></td>`;
+      <td><span class="pointer" title="remove this line" onclick="delete_line('line_${now}')";>🚮</span></td>`;
       filelist.prepend(new_file_line);
     }
 
@@ -187,6 +190,7 @@
     }
 
     function exportConfig() {
+      let playlist = [];
       config['channel'] = config_form['channel'].value;
       config['prefix'] = config_form['prefix'].value;
       config['rights']['user'] = config_form['rights_user'].checked;
@@ -197,31 +201,29 @@
       config['cooldown']['track'] = parseInt(config_form['cooldown_track'].value);
       config['cooldown']['command'] = parseInt(config_form['cooldown_command'].value);
 
-      let track_lines = document.getElementsByTagName('tr');
-      for(let i in track_lines) {
-        try {
-          let inputs = track_lines[i].getElementsByTagName('input');
-          let name = undefined;
-          let path = undefined;
-          for(let j in inputs) {
-            if(inputs[j].name === 'commandname')
-              name = inputs[j].value;
-            if(inputs[j].name === 'commandpath')
-              path = inputs[j].value;
-          }
-          if(name && path) {
-            uploaded_tracks.push({
-              'command': name,
-              'file': path,
-            })
-          }
+      let track_lines = document.getElementsByClassName('track_line');
+      for(let i=0; i < track_lines.length; i++) {
+        let inputs = track_lines[i].getElementsByClassName('input');
+        if(inputs.length === 0)
+          return;
+        let name = undefined;
+        let path = undefined;
+        for(let j in inputs) {
+          if(inputs[j].name === 'commandname')
+            name = inputs[j].value;
+          if(inputs[j].name === 'commandpath')
+            path = inputs[j].value;
         }
-        catch(err) {
+        if(name && path) {
+          playlist.push({
+            'command': name,
+            'file': path,
+          })
         }
       }
 
       let result = 'const config = ' + JSON.stringify(config, null, 2) + ';\n\n';
-      result += 'const tracks = ' + JSON.stringify(uploaded_tracks, null, 2);
+      result += 'const tracks = ' + JSON.stringify(playlist, null, 2);
       let b64 = 'data:application/javascript;base64,' + window.btoa(unescape(encodeURIComponent(result)));
       let fake_link = document.getElementById('fake_link');
       fake_link.href = b64;
