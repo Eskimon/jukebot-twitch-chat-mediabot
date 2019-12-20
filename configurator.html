@@ -38,7 +38,7 @@
             <div class="field">
               <label class="label" for="prefix">Your bot command</label>
               <div class="control">
-                <input id="prefix" name="prefix" class="input" type="text" placeholder="!play" value="!play">
+                <input id="prefix" name="prefix" class="input" type="text" placeholder="!play" value="!play" onchange="update_command_name();">
               </div>
               <p class="help">This is the keyword your bot will react to (<em><strong>!play</strong> mysupersong</em>)</p>
             </div>
@@ -146,6 +146,7 @@
     }
 
     addfile('', '');
+    update_command_name();
 
     function delete_line(id) {
       console.log(id);
@@ -160,13 +161,29 @@
       new_file_line.id = `line_${now}`;
       new_file_line.innerHTML = `
       <td class="track_line">
-        <input class="input is-small" name="commandname" placeholder="command name" value="${command}">
+        <div class="field has-addons">
+          <p class="control">
+            <span class="button is-static is-small bot-command-addon"></span>
+          </p>
+          <p class="control">
+            <input class="input is-small" name="commandname" placeholder="command name" value="${command}">
+          </p>
+        </div>
       </td>
       <td>
         <input class="input is-small" name="commandpath" placeholder="c:/absolute/file/path.mp3" value="${path}">
       </td>
       <td><a href="#" title="remove this line" onclick="delete_line('line_${now}')";>🚮</a></td>`;
       filelist.prepend(new_file_line);
+    }
+
+    function update_command_name() {
+      let elmts = document.getElementsByClassName('bot-command-addon');
+      let prefix = document.getElementById('prefix').value;
+
+      for(let idx in elmts) {
+        elmts[idx].textContent = prefix;
+      }
     }
 
     function exportConfig() {
