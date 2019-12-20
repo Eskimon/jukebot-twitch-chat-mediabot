@@ -6,80 +6,121 @@
     <title>My bot configurator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <script src="./config.js"></script>
+
+    <style>
+      .my-columns {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
+      <h1 class="title">JukeBot Configurator</h1>
+      <hr>
       <form id="config_form" onsubmit="return false">
-        <div class="field">
-          <label class="label" for="channel">Your channel name</label>
-          <div class="control">
-            <input id="channel" name="channel" class="input" type="text" placeholder="eskimon">
+        <div class="my-columns">
+          <div class="my-column">
+            <h4 class="title is-4">Bot settings</h4>
+            <h6 class="subtitle is-6">Set here the global bot settings</h6>
+            <div class="field">
+              <label class="label" for="channel">Your channel name</label>
+              <div class="control">
+                <input id="channel" name="channel" class="input" type="text" placeholder="eskimon">
+              </div>
+              <p class="help">This is your twitch channel name (<em>https://twitch.tv/<strong>channel-name</strong></em>)</p>
+            </div>
+            <div class="field">
+              <label class="label" for="prefix">Your bot command</label>
+              <div class="control">
+                <input id="prefix" name="prefix" class="input" type="text" placeholder="!play" value="!play">
+              </div>
+              <p class="help">This is the keyword your bot will react to (<em><strong>!play</strong> mysupersong</em>)</p>
+            </div>
+          </div>
+          <div class="my-column">
+            <h4 class="title is-4">Bot usage rights</h4>
+            <h6 class="subtitle is-6">Who can use the bot command?</h6>
+            <div class="field">
+              <label class="label" for="rights_user">
+                <input id="rights_user" name="rights_user" type="checkbox">
+                User
+              </label>
+            </div>
+            <div class="field">
+              <label class="label" for="rights_mods">
+                <input id="rights_mods" name="rights_mods" type="checkbox">
+                Moderators
+              </label>
+            </div>
+            <div class="field">
+              <label class="label" for="rights_subs">
+                <input id="rights_subs" name="rights_subs" type="checkbox">
+                Subs
+              </label>
+            </div>
+            <div class="field">
+              <label class="label" for="rights_vips">
+                <input id="rights_vips" name="rights_vips" type="checkbox">
+                VIPs
+              </label>
+            </div>
+          </div>
+          <div class="my-column">
+            <h4 class="title is-4">Bot command cooldown</h4>
+            <h6 class="subtitle is-6">How often can the bot be triggered (in seconds)?</h6>
+            <div class="field">
+              <label class="label" for="cooldown_user">Cooldown per user</label>
+              <div class="control">
+                <input id="cooldown_user" name="cooldown_user" class="input" type="number" min="0" value="10">
+              </div>
+              <p class="help">Time to wait for a user between two bot call</p>
+            </div>
+            <div class="field">
+              <label class="label" for="cooldown_track">Cooldown per track</label>
+              <div class="control">
+                <input id="cooldown_track" name="cooldown_track" class="input" type="number" min="0" value="10">
+              </div>
+              <p class="help">Time to wait between the use of the same track</p>
+            </div>
+            <div class="field">
+              <label class="label" for="cooldown_command">Cooldown per call</label>
+              <div class="control">
+                <input id="cooldown_command" name="cooldown_command" class="input" type="number" min="0" value="5">
+              </div>
+              <p class="help">Time to wait between two calls of the bot (across all users/tracks)</p>
+            </div>
           </div>
         </div>
-        <div class="field">
-          <label class="label" for="prefix">Your bot command</label>
-          <div class="control">
-            <input id="prefix" name="prefix" class="input" type="text" placeholder="!play" value="!play">
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label" for="rights_user">
-            <input id="rights_user" name="rights_user" type="checkbox">
-            User
-          </label>
-        </div>
-        <div class="field">
-          <label class="label" for="rights_mods">
-            <input id="rights_mods" name="rights_mods" type="checkbox">
-            Moderators
-          </label>
-        </div>
-        <div class="field">
-          <label class="label" for="rights_subs">
-            <input id="rights_subs" name="rights_subs" type="checkbox">
-            Subs
-          </label>
-        </div>
-        <div class="field">
-          <label class="label" for="rights_vips">
-            <input id="rights_vips" name="rights_vips" type="checkbox">
-            VIPs
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="label" for="cooldown_user">Cooldown per user</label>
-          <div class="control">
-            <input id="cooldown_user" name="cooldown_user" class="input" type="number" min="0" value="10">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label" for="cooldown_track">Cooldown per track</label>
-          <div class="control">
-            <input id="cooldown_track" name="cooldown_track" class="input" type="number" min="0" value="10">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label" for="cooldown_command">Cooldown per call</label>
-          <div class="control">
-            <input id="cooldown_command" name="cooldown_command" class="input" type="number" min="0" value="5">
-          </div>
-        </div>
+        <hr>
       </form>
 
-      <button onclick="exportConfig();">Save config.js</button>
-      <a id="fake_link" href="#" download="config.js" download style="visibility: hidden;"></a>
-
-      <table class="table is-hoverable is-striped">
+      <table class="table is-hoverable is-striped is-fullwidth">
         <thead>
           <tr><th>Command name</th><th>Audio file path</th><th></th></tr>
+          <tr><th colspan="3" class="has-text-centered"><button class="button is-info is-outlined" onclick="addfile();">Add a new file</button></th></tr>
         </thead>
         <tbody id="filelist">
-          <tr><td colspan="3" class="has-text-centered"><button onclick="addfile();">Add a new file</button></td></tr>
-          <tr><td class="track_line" id="line_1"><input name="commandname" placeholder="command name"></td><td><input name="commandpath" placeholder="c:/absolute/file/path.mp3"></td><td onclick="delete_line('line_1');">🚮</td></td></tr>
         </tbody>
       </table>
+
+      <hr>
+
+      <div class="has-text-centered">
+        <div class="message is-warning">
+          <div class="message-body">
+            <strong>When saving</strong>, make sure to save the file under the name <code>config.js</code> next to the <code>jukebot.js</code> file.
+          </div>
+        </div>
+        <button class="button is-primary is-medium" onclick="exportConfig();">Save config.js</button>
+        <a id="fake_link" href="#" download="config.js" download style="visibility: hidden;"></a>
+      </div>
+
     </div>
   </body>
 
@@ -104,6 +145,8 @@
       addfile(tracks[idx]['command'], tracks[idx]['file']);
     }
 
+    addfile('', '');
+
     function delete_line(id) {
       console.log(id);
       let elmt = document.getElementById(id);
@@ -116,10 +159,14 @@
       let new_file_line = document.createElement('tr');
       new_file_line.id = `line_${now}`;
       new_file_line.innerHTML = `
-      <td class="track_line"><input name="commandname" placeholder="command name" value="${command}"></td>
-      <td><input name="commandpath" placeholder="c:/absolute/file/path.mp3" value="${path}"></td>
-      <td onclick="delete_line('line_${now}');">🚮</td>`;
-      filelist.append(new_file_line);
+      <td class="track_line">
+        <input class="input is-small" name="commandname" placeholder="command name" value="${command}">
+      </td>
+      <td>
+        <input class="input is-small" name="commandpath" placeholder="c:/absolute/file/path.mp3" value="${path}">
+      </td>
+      <td><a href="#" title="remove this line" onclick="delete_line('line_${now}')";>🚮</a></td>`;
+      filelist.prepend(new_file_line);
     }
 
     function exportConfig() {
