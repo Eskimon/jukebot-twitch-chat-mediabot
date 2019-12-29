@@ -1,38 +1,26 @@
 const config = {
-  'channel': 'eskimon', // Change here the name of your channel
-  'cooldown': {
-    'user': 10,  // Minimal time (seconds) before a user can play again a track
-    'track': 10,  // Minimal time (seconds) before the same track can be played again
-    'command': 1,  // Minimal time (seconds) before the command can be used again
+  "channel": "eskimon",
+  "cooldown": {
+    "user": 10,
+    "track": 10,
+    "command": 1
   },
-  'prefix': '!play',  // Prefix to which your bot respond (ie. !play mysupermusic)
-  'rights': {
-    'user': true,  // Allow users to use the bot
-    'mods': true,  // Allow moderators to use the bot
-    'subs': true,  // Allow subs to use the bot
-    'vips': true,  // Allow vips to use the bot
+  "prefix": "!play",
+  "rights": {
+    "user": true,
+    "mods": true,
+    "subs": true,
+    "vips": true
   }
-}
+};
 
 const tracks = [
   {
-    'command': 'alavolette',
-    'file': '/home/eskimon/Documents/Bot_twitch_audio/a_la_volette1.mp3'
+    "command": "badumtsss",
+    "file": "C:\\Users\\eskimon\\sounds\\badumtsss.mp3"
   },
   {
-    'command': 'amoi',
-    'file': '/home/eskimon/Documents/Bot_twitch_audio/a_moi.mp3'
-  },
-  {
-    'command': 'assassin',
-    'file': '/home/eskimon/Documents/Bot_twitch_audio/a_moi_a_lassassin.mp3'
-  },
-  {
-    'command': 'bucher',
-    'file': '/home/eskimon/Documents/Bot_twitch_audio/bucher1.mp3'
-  },
-  {
-    'command': 'grelotine',
-    'file': '/home/eskimon/Documents/Bot_twitch_audio/Grelotine.mp3'
+    "command": "cata",
+    "file": "C:\\Users\\eskimon\\sounds\\catastrophe.mp3"
   }
 ]
